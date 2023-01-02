@@ -1,12 +1,10 @@
-import { Box, Heading, FormControl, Link, CircularProgress, InputRightElement, FormHelperText, chakra, FormLabel, InputLeftElement, InputGroup, Input, Button, Flex } from '@chakra-ui/react'
+import { Box, Heading, FormControl, CircularProgress, InputRightElement, chakra, FormLabel, InputLeftElement, InputGroup, Input, Button, Flex } from '@chakra-ui/react'
 import { useState, useEffect } from "react";
-import { FaUserAlt, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import axios from "axios"
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ErrorMessage } from '../../components/reusable/ErrorMessage'
 import { InputAttributeProps, InputDetails } from '../../utils/types/user.type';
 import { useRegister } from '../../utils/customhooks/useRegister';
-const CFaUserAlt = chakra(FaUserAlt);
-const CFaLock = chakra(FaLock);
+import { Link, useNavigate } from 'react-router-dom';
 const CFaEye = chakra(FaEye);
 const CFaEyeSlash = chakra(FaEyeSlash);
 export const Register = () => {
@@ -18,8 +16,7 @@ export const Register = () => {
             placeholder: "john123",
             label: "Username",
             required: true,
-            hasrightelement: "false",
-            // icon: <CFaEyeSlash />
+            hasrightelement: "false"
         },
         {
             id: "2",
@@ -28,8 +25,7 @@ export const Register = () => {
             placeholder: "john@example.com",
             label: "Email",
             required: true,
-            hasrightelement: "false",
-            // icon: <CFaEyeSlash />
+            hasrightelement: "false"
         },
         {
             id: "3",
@@ -95,8 +91,8 @@ export const Register = () => {
         setTogglePassword(!togglePassword)
     }
 
-    const { mutate, data, error, isLoading } = useRegister()
-
+    const { mutate, data, error, isSuccess, isLoading } = useRegister()
+    const navigate = useNavigate()
     const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         const user = {
@@ -120,9 +116,10 @@ export const Register = () => {
         })
     }
     useEffect(() => {
+        isSuccess && navigate('/login')
         // data && localStorage.setItem("token", data.data.token)
         data && console.log(data)
-    }, [data?.data.token])
+    }, [data?.data.token, isSuccess])
 
     return (
         <Flex width="full" my={8} height="100vh" align="center" justifyContent="center">
@@ -152,7 +149,6 @@ export const Register = () => {
                                 </InputGroup>
                             </FormControl>
                         ))}
-
                         <Button
                             disabled={
                                 !values.email
@@ -167,10 +163,10 @@ export const Register = () => {
                         </Button>
                     </form>
                 </Box>
-                <Box textAlign={"center"}>
-                    Don't have an account?{" "}
-                    <Link color="teal.500" href="#">
-                        Sign Up
+                <Box textAlign={"center"} mt={4}>
+                    Already have an account?{" "}
+                    <Link color="teal.500" to="/login">
+                        Sign In
                     </Link>
                 </Box>
             </Box>

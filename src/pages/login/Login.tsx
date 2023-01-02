@@ -34,6 +34,7 @@ export const Login = () => {
     useEffect(() => {
         isSuccess && navigate('/')
         data && localStorage.setItem("token", data.data.token)
+        data && localStorage.setItem("username", data.data.user.username)
         data && console.log(data)
     }, [data?.data.token, isSuccess])
 
